@@ -25,7 +25,7 @@ func (u *User) GetCurrentStatus() map[string]interface{} {
 	// If no, status = free
 	// Get current time(indian timezone) without `date` part
 	now := time.Now()
-	currTime := time.Date(0, 1, 1, now.Hour(), now.Minute(), now.Second(), 0, time.UTC).Add(5*time.Hour + 30*time.Minute)
+	currTime := time.Date(0, 1, 1, now.Hour(), now.Minute(), now.Second(), 0, time.Local)
 	// Remove date part
 	fmt.Println("Current time: ", currTime)
 	daySlots := u.GetTimeTable().GetDaySlots(time.Now().Weekday())

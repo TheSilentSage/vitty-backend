@@ -23,6 +23,8 @@ COPY --from=builder /usr/src/app/bin/vitty ./bin/vitty
 
 COPY --from=builder /usr/src/app/credentials ./credentials
 
+
+RUN apk --no-cache add tzdata
 RUN chmod +x ./bin/vitty
 
 CMD ["./bin/vitty", "run"]
