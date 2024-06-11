@@ -1,6 +1,8 @@
 package api
 
 import (
+	"time"
+
 	v1 "github.com/GDGVIT/vitty-backend/vitty-backend-api/api/v1"
 	v2 "github.com/GDGVIT/vitty-backend/vitty-backend-api/api/v2"
 	"github.com/gofiber/fiber/v2"
@@ -11,8 +13,6 @@ import (
 func NewWebApi() *fiber.App {
 	// New fiber app
 	fiberApp := fiber.New()
-
-	fiberApp = fiber.New()
 	fiberApp.Use(logger.New())
 	fiberApp.Use(cors.New(
 		cors.Config{
@@ -35,6 +35,9 @@ func NewWebApi() *fiber.App {
 				"detail": "pong",
 			})
 	})
+
+	local, _ := time.LoadLocation("Asia/Kolkata")
+	time.Local = local
 
 	api := fiberApp.Group("/api")
 	v1.V1Handler(api)

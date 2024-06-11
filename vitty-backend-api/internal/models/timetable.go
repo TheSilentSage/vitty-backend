@@ -7,6 +7,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+const STD_REF_TIME = "2006-01-02T15:04"
+
 type Slot struct {
 	Name      string    `json:"name"`
 	Code      string    `json:"code"`
@@ -28,11 +30,39 @@ func (t Timetable) GetDaySlots(day time.Weekday) map[string][]Slot {
 	var data []Slot
 	daySlots := DailySlots[day.String()]
 
+	var err error
 	// Theory slots
 	for _, slot := range t.Slots {
 		if slot.Type == "Theory" && slices.Contains(daySlots["Theory"], slot.Slot) {
+			index := slices.Index(daySlots["Theory"], slot.Slot)
+			slot.StartTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].StartTime, time.Local)
+			if err != nil {
+				log.Println("Error parsing time: ", err)
+				return nil
+			}
+
+			slot.EndTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].EndTime, time.Local)
+
+			if err != nil {
+				log.Println("Error parsing time: ", err)
+				return nil
+			}
+
 			data = append(data, slot)
 		} else if slot.Type == "Lab" && slices.Contains(daySlots["Lab"], slot.Slot) {
+			index := slices.Index(daySlots["Lab"], slot.Slot)
+			slot.StartTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].StartTime, time.Local)
+			if err != nil {
+				log.Println("Error parsing time: ", err)
+				return nil
+			}
+
+			slot.EndTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].EndTime, time.Local)
+
+			if err != nil {
+				log.Println("Error parsing time: ", err)
+				return nil
+			}
 			data = append(data, slot)
 		}
 	}
@@ -48,25 +78,29 @@ func (t Timetable) GetDaywiseTimetable() map[string][]Slot {
 			if slices.Contains(value["Theory"], slot.Slot) {
 				index := slices.Index(value["Theory"], slot.Slot)
 				var err error
-				slot.StartTime, err = time.Parse("15:04", TheoryTimings[index].StartTime)
+				slot.StartTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].StartTime, time.Local)
 				if err != nil {
 					log.Println("Error parsing time: ", err)
+					return nil
 				}
-				slot.EndTime, err = time.Parse("15:04", TheoryTimings[index].EndTime)
+				slot.EndTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].EndTime, time.Local)
 				if err != nil {
 					log.Println("Error parsing time: ", err)
+					return nil
 				}
 				resp[day] = append(resp[day], slot)
 			} else if slices.Contains(value["Lab"], slot.Slot) {
 				index := slices.Index(value["Lab"], slot.Slot)
 				var err error
-				slot.StartTime, err = time.Parse("15:04", LabTimings[index].StartTime)
+				slot.StartTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].StartTime, time.Local)
 				if err != nil {
 					log.Println("Error parsing time: ", err)
+					return nil
 				}
-				slot.EndTime, err = time.Parse("15:04", LabTimings[index].EndTime)
+				slot.EndTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].EndTime, time.Local)
 				if err != nil {
 					log.Println("Error parsing time: ", err)
+					return nil
 				}
 				resp[day] = append(resp[day], slot)
 			}
@@ -80,22 +114,22 @@ func (s *Slot) AddSlotTime() error {
 		if slices.Contains(value["Theory"], s.Slot) {
 			index := slices.Index(value["Theory"], s.Slot)
 			var err error
-			s.StartTime, err = time.Parse("15:04", TheoryTimings[index].StartTime)
+			s.StartTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].StartTime, time.Local)
 			if err != nil {
 				return err
 			}
-			s.EndTime, err = time.Parse("15:04", TheoryTimings[index].EndTime)
+			s.EndTime, err = time.ParseInLocation(STD_REF_TIME, TheoryTimings[index].EndTime, time.Local)
 			if err != nil {
 				return err
 			}
 		} else if slices.Contains(value["Lab"], s.Slot) {
 			index := slices.Index(value["Lab"], s.Slot)
 			var err error
-			s.StartTime, err = time.Parse("15:04", LabTimings[index].StartTime)
+			s.StartTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].StartTime, time.Local)
 			if err != nil {
 				return err
 			}
-			s.EndTime, err = time.Parse("15:04", LabTimings[index].EndTime)
+			s.EndTime, err = time.ParseInLocation(STD_REF_TIME, LabTimings[index].EndTime, time.Local)
 			if err != nil {
 				return err
 			}
