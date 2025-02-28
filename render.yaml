@@ -1,0 +1,56 @@
+services:
+  - name: vitty-api
+    type: web
+    runtime: docker
+    envVars:
+      - key: FIBER_PORT
+        sync: false
+      - key: DEBUG
+        sync: false
+      - key: POSTGRES_URL
+        sync: false
+      - key: POSTGRES_USER
+        fromDatabase:
+              name: vitty-psql
+              property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+              name: vitty-psql
+              property: password
+      - key: POSTGRES_DB
+        fromDatabase:
+              name: vitty-psql
+              property: database
+      - key: POSTGRES_HOST
+        fromDatabase:
+              name: vitty-psql
+              property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+              name: vitty-psql
+              property: port
+      - key: OAUTH_CALLBACK_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_REDIRECT_URI
+        sync: false
+      - key: RUN_JOBS
+        sync: false
+      - key: DAILY_JOB_MIN
+        sync: false
+      - key: DAILY_JOB_SEC
+        sync: false
+      - key: WEEKLY_JOB_MIN
+        sync: false
+      - key: WEEKLY_JOB_SEC
+        sync: false     
+    plan: free
+
+databases:
+  - name: vitty-psql
+    plan: free
