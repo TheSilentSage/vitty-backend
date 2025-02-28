@@ -11,6 +11,7 @@ COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
+COPY  /etc/secrets/firebase-creds.json /etc/secrets/oauth2-credentials ./
 
 RUN go build -o bin/vitty
 
@@ -20,10 +21,7 @@ FROM alpine:3.15 AS runner
 WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/bin/vitty ./bin/vitty
-
-COPY --from=builder /usr/src/app/credentials ./credentials
-
-
+COPY  --from=builder /usr/src/app/firebase-creds.json /usr/src/app/oauth2-credentials.json ./credentials/
 RUN apk --no-cache add tzdata
 RUN chmod +x ./bin/vitty
 
