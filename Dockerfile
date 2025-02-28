@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 
 RUN apk update \
     && apk --no-cache --update add build-base git
-RUN ls ./etc/
+RUN ls /etc/
 COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 
 RUN go mod download && go mod verify
