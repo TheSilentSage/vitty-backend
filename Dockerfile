@@ -5,16 +5,15 @@ WORKDIR /usr/src/app
 
 RUN apk update \
     && apk --no-cache --update add build-base git
-
+RUN ls ./
 COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
-RUN ls ./
 # COPY  ./etc/secrets/firebase-creds.json ./etc/secrets/oauth2-credentials.json ./
 
-RUN go build -o bin/vitty
+# RUN go build -o bin/vittymod
 
 # RUNNER IMAGE
 FROM alpine:3.15 AS runner
