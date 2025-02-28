@@ -11,7 +11,7 @@ COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
-RUN cat ./
+RUN ls ./
 # COPY  ./etc/secrets/firebase-creds.json ./etc/secrets/oauth2-credentials.json ./
 
 RUN go build -o bin/vitty
