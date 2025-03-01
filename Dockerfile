@@ -1,3 +1,5 @@
+# syntax = docker/dockerfile:1.2
+
 # BUILD IMAGE
 FROM golang:1.19.3-alpine3.15 AS builder
 
@@ -5,13 +7,17 @@ WORKDIR /usr/src/app
 
 RUN apk update \
     && apk --no-cache --update add build-base git
-RUN ls /etc/
+
+
+RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json
+RUN --mount=type=secret,id=oauth2_credentials_json,dst=/etc/secrets/oauth2-credentials.json
+
 COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
-# COPY  ./etc/secrets/firebase-creds.json ./etc/secrets/oauth2-credentials.json ./
+COPY  /etc/secrets/firebase-creds.json ./etc/secrets/oauth2-credentials.json ./
 
 # RUN go build -o bin/vittymod
 
