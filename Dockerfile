@@ -9,7 +9,7 @@ RUN apk update \
     && apk --no-cache --update add build-base git
 
 
-RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json
+RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json ls /etc/secrets
 RUN --mount=type=secret,id=oauth2_credentials_json,dst=/etc/secrets/oauth2-credentials.json
 
 COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
