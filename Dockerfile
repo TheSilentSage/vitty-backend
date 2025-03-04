@@ -2,7 +2,6 @@
 
 # BUILD IMAGE
 FROM golang:1.19.3-alpine3.15 AS builder
-RUN ls /etc/secrets
 WORKDIR /usr/src/app
 
 RUN apk update \
@@ -16,7 +15,7 @@ COPY ./vitty-backend-api .
 RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json  COPY  /etc/secrets/firebase-creds.json  ./
 RUN --mount=type=secret,id=oauth2_credentials_json,dst=/etc/secrets/oauth2-credentials.json  COPY  /etc/secrets/oauth2-credentials.json  ./
 
-# RUN go build -o bin/vittymod
+RUN go build -o bin/vittymod
 
 # RUNNER IMAGE
 FROM alpine:3.15 AS runner
