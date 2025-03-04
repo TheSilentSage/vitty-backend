@@ -12,8 +12,8 @@ COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
-RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json  COPY  /etc/secrets/firebase-creds.json  ./
-RUN --mount=type=secret,id=oauth2_credentials_json,dst=/etc/secrets/oauth2-credentials.json  COPY  /etc/secrets/oauth2-credentials.json  ./
+RUN --mount=type=secret,id=firebase_creds_json,dst=/etc/secrets/firebase-creds.json  cp  /etc/secrets/firebase-creds.json  ./
+RUN --mount=type=secret,id=oauth2_credentials_json,dst=/etc/secrets/oauth2-credentials.json  cp  /etc/secrets/oauth2-credentials.json  ./
 
 RUN go build -o bin/vittymod
 
