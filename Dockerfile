@@ -11,6 +11,7 @@ COPY ./vitty-backend-api/go.mod ./vitty-backend-api/go.sum ./
 RUN go mod download && go mod verify
 
 COPY ./vitty-backend-api .
+RUN mkdir ./credentials
 
 RUN go build -o bin/vitty
 
@@ -19,7 +20,6 @@ FROM alpine:3.15 AS runner
 
 WORKDIR /usr/src/app
 RUN mkdir ./data
-RUN mkdir ./credentials
 
 COPY --from=builder /usr/src/app/bin/vitty ./bin/vitty
 
